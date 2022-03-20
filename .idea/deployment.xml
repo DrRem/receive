@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="localserver (52597833-90e7-4260-ae2e-83cfe289bc79)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp.BIHle5K21P" local="$PROJECT_DIR$" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-localserver" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-localserver" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
