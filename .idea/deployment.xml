@@ -13,6 +13,16 @@
           </excludedPaths>
         </serverdata>
       </paths>
+      <paths name="华为云 (3b7822cf-2ed9-4e2d-b956-242dd9d660d5)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/tmp.qag54fblsT" local="$PROJECT_DIR$" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
     </serverData>
   </component>
 </project>
