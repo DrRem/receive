@@ -16,8 +16,7 @@ double jitter = 0;
 double B = 0;
 int late = 0;
 
-
-struct timeval tv;
+struct timeval tv,tv1;
 
 void measure(const PRTPDATA *prtpData);
 
@@ -70,7 +69,7 @@ void FreeNALU(NALU_t *n)
     }
 }
 
-void rtp_unpackage(char *bufIn, int len)
+void rtp_unpackage(char *bufIn, int len, struct sockaddr_in * resend,SOCKET socket1)
 {
     unsigned char recvbuf[1500];
     RTPpacket_t *p = NULL;
@@ -81,6 +80,7 @@ void rtp_unpackage(char *bufIn, int len)
     FU_HEADER		*fu_hdr = NULL;
 
     PRTPDATA * prtpData = NULL;
+    PRTPDATA_RETURN * rprtpData = NULL;
 
     int total_bytes = 0;                 //当前包传出的数据
     static int total_recved = 0;         //一共传输的数据
@@ -130,6 +130,11 @@ void rtp_unpackage(char *bufIn, int len)
     if (rtp_hdr->payload == PRTP)
     {
         prtpData = (PRTPDATA*)&recvbuf[12];
+        rprtpData = (PRTPDATA_RETURN*)&recvbuf[12];
+        rprtpData->receive_Time = tv.tv_sec*1000000 + tv.tv_usec - Timestamp_parameter;
+        gettimeofday(&tv1,NULL);
+        rprtpData->receive_resend_Time = tv1.tv_sec*1000000 + tv1.tv_usec - Timestamp_parameter;
+        sendto(socket1,recvbuf,Measure_message_length,0,(struct sockaddr_in *)resend, sizeof((*resend)));
         measure(prtpData);
         return;
 
@@ -461,7 +466,7 @@ int main(int argc, char* argv[])
 
     char recvbuf[MAXDATASIZE];  //加上头最大传输数据 1500
     SOCKET socket1;
-    struct sockaddr_in client;//分配一个地址结构体
+    struct sockaddr_in client,resend;//分配一个地址结构体
     socklen_t len_client = sizeof(client);
     socklen_t	receive_bytes = 0;
 
@@ -475,6 +480,11 @@ int main(int argc, char* argv[])
     client.sin_family = AF_INET;
     client.sin_addr.s_addr = inet_addr(DEST_IP);
     client.sin_port = htons(DEST_PORT);
+
+    resend.sin_family = AF_INET;
+    resend.sin_addr.s_addr = inet_addr(DEST_IP_RESEND);
+    resend.sin_port = htons(DEST_PORT_RESEND);
+
 
     int opt = 1;
     setsockopt(socket1, SOL_SOCKET, SO_REUSEADDR, (const char *)&opt, sizeof(opt));
@@ -495,7 +505,7 @@ int main(int argc, char* argv[])
     while ((receive_bytes = recvfrom(socket1, recvbuf, MAXDATASIZE, 0, (struct sockaddr *)&client, &len_client)) > 0)
     {
         poutfile = fopen(outputfilename, "ab+");
-        rtp_unpackage(recvbuf, receive_bytes);
+        rtp_unpackage(recvbuf, receive_bytes,&resend,socket1);
         fclose(poutfile);
     }
     return getchar();
