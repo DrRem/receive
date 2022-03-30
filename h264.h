@@ -107,4 +107,19 @@ typedef struct
     /**//* bytes 12-15 */
 } PRTPDATA;
 
+typedef struct
+{
+    /**//* byte 0-3 */
+    unsigned int send_Index;
+    /**//* bytes 4-7 */
+    unsigned int send_Count;
+    /**//* bytes 8-11 */
+    unsigned int send_Time;   /* stream number is used here. */
+    /**//* bytes 12-15 */
+    unsigned int receive_Time;
+    /**//* bytes 16-20 */
+    unsigned int receive_resend_Time;
+    /**//* bytes 21-24 */
+} PRTPDATA_RETURN;
+
 #endif //RECEIVE_H264_H
