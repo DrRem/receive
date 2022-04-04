@@ -21,8 +21,8 @@
 
 #define MAX_RTP_PKT_LENGTH     1400
 
-#define DEST_IP                "127.0.0.1"
-#define DEST_IP_RESEND         "127.0.0.1"
+#define DEST_IP                "127.0.0.1"  //本机IP
+#define DEST_IP_RESEND         "127.0.0.1"  //发送端IP
 #define DEST_PORT            12348
 #define DEST_PORT_RESEND     12350
 
